@@ -85,7 +85,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="frida,hook," />
 
 
 
@@ -96,16 +96,67 @@
 
 
 
-<meta name="description" content="学习笔记｜博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hzzheyang&#39;s blog">
-<meta property="og:url" content="https://hzzheyang.github.io/">
+<meta name="description" content="1. 致谢 2. Frida环境  2.1. pyenv  2.2. frida安装  2.3. 安装objection  2.4. frida使用  2.5. frida开发环境搭建   3. FRIDA基础  3.1. frida查看当前存在的进程  3.2. frida打印参数和修改返回值  3.3. frida寻找instance，主动调用。  3.4. frida rpc  3.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Frida Android hook">
+<meta property="og:url" content="https://hzzheyang.github.io/2021/03/10/Frida-Android-hook/">
 <meta property="og:site_name" content="hzzheyang&#39;s blog">
-<meta property="og:description" content="学习笔记｜博客">
+<meta property="og:description" content="1. 致谢 2. Frida环境  2.1. pyenv  2.2. frida安装  2.3. 安装objection  2.4. frida使用  2.5. frida开发环境搭建   3. FRIDA基础  3.1. frida查看当前存在的进程  3.2. frida打印参数和修改返回值  3.3. frida寻找instance，主动调用。  3.4. frida rpc  3.">
 <meta property="og:locale">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-04-17-134140.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-04-17-134837.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-100849.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-120749.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-121130.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-121255.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-121403.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-125545.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-125604.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-125824.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-27-132438.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-29-092212.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-29-092522.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-30-004653.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-30-004915.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-30-033242.jpg">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-30-033633.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-30-034053.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-30-154643.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-06-30-155007.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-01-065833.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-01-103826.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-01-104029.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-01-104113.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-01-104131.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-01-102552.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-101517.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-101821.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-101843.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-121051.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-102944.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-102844.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-112221.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-120940.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-121012.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-120907.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-161438.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-161519.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-161601.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-02-161613.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-03-082029.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-03-095937.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-03-095955.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-03-100022.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-03-100042.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-03-122151.png">
+<meta property="og:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-07-03-142324.png">
+<meta property="article:published_time" content="2021-03-10T02:01:57.000Z">
+<meta property="article:modified_time" content="2021-03-10T02:46:04.689Z">
 <meta property="article:author" content="hzzheyang">
-<meta property="article:tag" content="frida 逆向">
+<meta property="article:tag" content="frida">
+<meta property="article:tag" content="hook">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sakura-1252236262.cos.ap-beijing.myqcloud.com/2020-04-17-134140.png">
 
 
 
@@ -135,13 +186,13 @@
 
 
 
-  <link rel="canonical" href="https://hzzheyang.github.io/"/>
+  <link rel="canonical" href="https://hzzheyang.github.io/2021/03/10/Frida-Android-hook/"/>
 
 
 
 
 
-  <title>hzzheyang's blog</title>
+  <title>Frida Android hook | hzzheyang's blog</title>
   
 
 
@@ -160,8 +211,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
     <a target="_blank" rel="noopener" href="https://github.com/hzzheyang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -264,9 +314,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -296,9 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/03/10/Frida-Android-hook/" itemprop="url">Frida Android hook</a></h1>
+          <h1 class="post-title" itemprop="name headline">Frida Android hook</h1>
         
 
         <div class="post-meta">
@@ -348,9 +396,7 @@
       
 
       
-        
-          
-            <!--noindex-->
+        <!--noindex-->
 
 <ol>
 <li> <a href="#%E8%87%B4%E8%B0%A2">1. 致谢</a></li>
@@ -1073,8 +1119,6 @@
 <h3 id="Native-JNI层参数打印和主动调用参数构造"><a href="#Native-JNI层参数打印和主动调用参数构造" class="headerlink" title="Native/JNI层参数打印和主动调用参数构造"></a><a href="#Native-JNI%E5%B1%82%E5%8F%82%E6%95%B0%E6%89%93%E5%8D%B0%E5%92%8C%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E5%8F%82%E6%95%B0%E6%9E%84%E9%80%A0" title="Native/JNI层参数打印和主动调用参数构造"></a>Native/JNI层参数打印和主动调用参数构造</h3><p>jni的基本类型要通过调用jni相关的api转化成c++对象，才能打印和调用。<br>jni主动调用的时候，参数构造有两种方式，一种是<code>Java.vm.getenv</code>，另一种是hook获取env之后来调用jni相关的api构造参数。</p>
 <h3 id="C-C-编成so并引入Frida调用其中的函数"><a href="#C-C-编成so并引入Frida调用其中的函数" class="headerlink" title="C/C++编成so并引入Frida调用其中的函数"></a><a href="#C-C-%E7%BC%96%E6%88%90so%E5%B9%B6%E5%BC%95%E5%85%A5Frida%E8%B0%83%E7%94%A8%E5%85%B6%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0" title="C/C++编成so并引入Frida调用其中的函数"></a>C/C++编成so并引入Frida调用其中的函数</h3><p><a href="/tags/frida/"># frida</a></p>
 
-          
-        
       
     </div>
     
@@ -1089,265 +1133,38 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hzzheyang.github.io/2021/02/23/%E5%8F%91%E5%B8%83%E7%AC%AC%E4%B8%80%E7%AF%87%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hzzheyang's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/02/23/%E5%8F%91%E5%B8%83%E7%AC%AC%E4%B8%80%E7%AF%87%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="url">发布第一篇个人博客</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-23T10:25:21+08:00">
-                2021-02-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/frida/" rel="tag"># frida</a>
           
-            
+            <a href="/tags/hook/" rel="tag"># hook</a>
           
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hzzheyang.github.io/2021/02/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hzzheyang's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/02/23/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+              <a href="/2021/02/23/%E5%8F%91%E5%B8%83%E7%AC%AC%E4%B8%80%E7%AF%87%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="next" title="发布第一篇个人博客">
+                <i class="fa fa-chevron-left"></i> 发布第一篇个人博客
+              </a>
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-23T10:19:52+08:00">
-                2021-02-23
-              </time>
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1357,10 +1174,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -1368,6 +1186,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1388,8 +1210,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1440,6 +1271,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">Frida环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pyenv"><span class="nav-number">1.1.</span> <span class="nav-text">pyenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.</span> <span class="nav-text">frida安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85objection"><span class="nav-number">1.3.</span> <span class="nav-text">安装objection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida%E4%BD%BF%E7%94%A8"><span class="nav-number">1.4.</span> <span class="nav-text">frida使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.5.</span> <span class="nav-text">frida开发环境搭建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FRIDA%E5%9F%BA%E7%A1%80"><span class="nav-number">2.</span> <span class="nav-text">FRIDA基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#frida%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">frida查看当前存在的进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida%E6%89%93%E5%8D%B0%E5%8F%82%E6%95%B0%E5%92%8C%E4%BF%AE%E6%94%B9%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">2.2.</span> <span class="nav-text">frida打印参数和修改返回值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida%E5%AF%BB%E6%89%BEinstance%EF%BC%8C%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E3%80%82"><span class="nav-number">2.3.</span> <span class="nav-text">frida寻找instance，主动调用。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida-rpc"><span class="nav-number">2.4.</span> <span class="nav-text">frida rpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida%E5%8A%A8%E6%80%81%E4%BF%AE%E6%94%B9"><span class="nav-number">2.5.</span> <span class="nav-text">frida动态修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-List"><span class="nav-number">2.6.</span> <span class="nav-text">API List</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida%E5%8A%A8%E9%9D%99%E6%80%81%E7%BB%93%E5%90%88%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">Frida动静态结合分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Objection"><span class="nav-number">3.1.</span> <span class="nav-text">Objection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#objection%E5%90%AF%E5%8A%A8%E5%B9%B6%E6%B3%A8%E5%85%A5%E5%86%85%E5%AD%98"><span class="nav-number">3.1.1.</span> <span class="nav-text">objection启动并注入内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#objection-memory"><span class="nav-number">3.1.2.</span> <span class="nav-text">objection memory</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AD%98%E4%B8%AD%E5%8A%A0%E8%BD%BD%E7%9A%84module-memory-list-modules"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">查看内存中加载的module memory list modules</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BA%93%E7%9A%84%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0-memory-list-exports-libssl-so"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">查看库的导出函数 memory list exports libssl.so</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dump%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">dump内存空间</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">搜索内存空间</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#objection-android"><span class="nav-number">3.1.3.</span> <span class="nav-text">objection android</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%A0%86%E6%90%9C%E7%B4%A2%E5%AE%9E%E4%BE%8B-android-heap-search-instances-%E7%B1%BB%E5%90%8D"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">内存堆搜索实例 android heap search instances 类名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%AE%9E%E4%BE%8B%E7%9A%84%E6%96%B9%E6%B3%95-android-heap-execute-%E5%AE%9E%E4%BE%8BID-%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.3.2.</span> <span class="nav-text">调用实例的方法 android heap execute 实例ID 实例方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E5%8F%AF%E7%94%A8%E7%9A%84activity%E6%88%96%E8%80%85service-android-hooking-list-activities-services"><span class="nav-number">3.1.3.3.</span> <span class="nav-text">查看当前可用的activity或者service android hooking list activities&#x2F;services</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E5%90%AF%E5%8A%A8activity%E6%88%96%E8%80%85%E6%9C%8D%E5%8A%A1-android-intent-launch-activity-launch-service-activity-%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.1.3.4.</span> <span class="nav-text">直接启动activity或者服务 android intent launch_activity&#x2F;launch_service activity&#x2F;服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%97%E5%87%BA%E5%86%85%E5%AD%98%E4%B8%AD%E6%89%80%E6%9C%89%E7%9A%84%E7%B1%BB-android-hooking-list-classes"><span class="nav-number">3.1.3.5.</span> <span class="nav-text">列出内存中所有的类 android hooking list classes</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E6%89%80%E6%9C%89%E5%B7%B2%E5%8A%A0%E8%BD%BD%E7%9A%84%E7%B1%BB%E4%B8%AD%E6%90%9C%E7%B4%A2%E5%8C%85%E5%90%AB%E7%89%B9%E5%AE%9A%E5%85%B3%E9%94%AE%E8%AF%8D%E7%9A%84%E7%B1%BB%E3%80%82-android-hooking-search-classes-display"><span class="nav-number">3.1.3.6.</span> <span class="nav-text">在内存中所有已加载的类中搜索包含特定关键词的类。 android hooking search classes display</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%B8%AD%E6%90%9C%E7%B4%A2%E6%8C%87%E5%AE%9A%E7%B1%BB%E7%9A%84%E6%89%80%E6%9C%89%E6%96%B9%E6%B3%95-android-hooking-list-class-methods-%E7%B1%BB%E5%90%8D"><span class="nav-number">3.1.3.7.</span> <span class="nav-text">内存中搜索指定类的所有方法 android hooking list class_methods 类名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E6%89%80%E6%9C%89%E5%B7%B2%E5%8A%A0%E8%BD%BD%E7%9A%84%E7%B1%BB%E7%9A%84%E6%96%B9%E6%B3%95%E4%B8%AD%E6%90%9C%E7%B4%A2%E5%8C%85%E5%90%AB%E7%89%B9%E5%AE%9A%E5%85%B3%E9%94%AE%E8%AF%8D%E7%9A%84%E6%96%B9%E6%B3%95-android-hooking-search-methods-display"><span class="nav-number">3.1.3.8.</span> <span class="nav-text">在内存中所有已加载的类的方法中搜索包含特定关键词的方法 android hooking search methods display</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hook%E7%B1%BB%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88hook%E7%B1%BB%E9%87%8C%E7%9A%84%E6%89%80%E6%9C%89%E6%96%B9%E6%B3%95-%E5%85%B7%E4%BD%93%E6%9F%90%E4%B8%AA%E6%96%B9%E6%B3%95%EF%BC%89"><span class="nav-number">3.1.3.9.</span> <span class="nav-text">hook类的方法（hook类里的所有方法&#x2F;具体某个方法）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#grep-trick%E5%92%8C%E6%96%87%E4%BB%B6%E4%BF%9D%E5%AD%98"><span class="nav-number">3.1.4.</span> <span class="nav-text">grep trick和文件保存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.2.</span> <span class="nav-text">案例学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%AD%A6%E4%B9%A0case1-%E3%80%8A%E4%BB%BFVX%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8E%9F%E5%9E%8B%E5%8F%96%E8%AF%81%E9%80%86%E5%90%91%E5%88%86%E6%9E%90%E3%80%8B"><span class="nav-number">3.2.1.</span> <span class="nav-text">案例学习case1:《仿VX数据库原型取证逆向分析》</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%AD%A6%E4%B9%A0case2-%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E7%88%86%E7%A0%B4%E5%AF%86%E7%A0%81"><span class="nav-number">3.2.2.</span> <span class="nav-text">案例学习case2:主动调用爆破密码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-hook%E5%9F%BA%E7%A1%80-%E4%B8%80"><span class="nav-number">4.</span> <span class="nav-text">Frida hook基础(一)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-%E6%89%93%E5%8D%B0%E5%8F%82%E6%95%B0%E3%80%81%E8%BF%94%E5%9B%9E%E5%80%BC-%E8%AE%BE%E7%BD%AE%E8%BF%94%E5%9B%9E%E5%80%BC-%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">Frida hook : 打印参数、返回值&#x2F;设置返回值&#x2F;主动调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E9%9D%99%E6%80%81-%E9%9D%9E%E9%9D%99%E6%80%81%E5%87%BD%E6%95%B0-%E4%BB%A5%E5%8F%8A-%E8%AE%BE%E7%BD%AE%E9%9D%99%E6%80%81-%E9%9D%9E%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC"><span class="nav-number">4.2.</span> <span class="nav-text">Frida hook : 主动调用静态&#x2F;非静态函数 以及 设置静态&#x2F;非静态成员变量的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-%E5%86%85%E9%83%A8%E7%B1%BB%EF%BC%8C%E6%9E%9A%E4%B8%BE%E7%B1%BB%E7%9A%84%E5%87%BD%E6%95%B0%E5%B9%B6hook%EF%BC%8Ctrace%E5%8E%9F%E5%9E%8B1"><span class="nav-number">4.3.</span> <span class="nav-text">Frida hook : 内部类，枚举类的函数并hook，trace原型1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-hook%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E7%9A%84dex%EF%BC%8C%E4%B8%8E%E6%9F%A5%E6%89%BEinterface%EF%BC%8C"><span class="nav-number">4.4.</span> <span class="nav-text">Frida hook : hook动态加载的dex，与查找interface，</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-%E6%9E%9A%E4%B8%BEclass%EF%BC%8Ctrace%E5%8E%9F%E5%9E%8B2"><span class="nav-number">4.5.</span> <span class="nav-text">Frida hook : 枚举class，trace原型2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-%E6%90%9C%E7%B4%A2interface%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-number">4.6.</span> <span class="nav-text">Frida hook : 搜索interface的具体实现类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-hook%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C"><span class="nav-number">5.</span> <span class="nav-text">Frida hook基础（二)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spawn-attach"><span class="nav-number">5.1.</span> <span class="nav-text">spawn&#x2F;attach</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-hook%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-%E6%89%93%E5%8D%B0%E6%A0%88%E5%9B%9E%E6%BA%AF"><span class="nav-number">5.2.</span> <span class="nav-text">Frida hook :hook构造函数&#x2F;打印栈回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-%E6%89%93%E5%8D%B0%E6%A0%88%E5%9B%9E%E6%BA%AF"><span class="nav-number">5.3.</span> <span class="nav-text">Frida hook : 打印栈回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-%E6%89%8B%E5%8A%A8%E5%8A%A0%E8%BD%BDdex%E5%B9%B6%E8%B0%83%E7%94%A8"><span class="nav-number">5.4.</span> <span class="nav-text">Frida hook : 手动加载dex并调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida%E6%89%93%E5%8D%B0%E4%B8%8E%E5%8F%82%E6%95%B0%E6%9E%84%E9%80%A0"><span class="nav-number">6.</span> <span class="nav-text">Frida打印与参数构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#char-Object-Object"><span class="nav-number">6.1.</span> <span class="nav-text">char[]&#x2F;[Object Object]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#byte"><span class="nav-number">6.2.</span> <span class="nav-text">byte[]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-array%E6%9E%84%E9%80%A0"><span class="nav-number">6.3.</span> <span class="nav-text">java array构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%A4%9A%E6%80%81%EF%BC%9A%E8%BD%AC%E5%9E%8B-Java-cast"><span class="nav-number">6.4.</span> <span class="nav-text">类的多态：转型&#x2F;Java.cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interface-Java-registerClass"><span class="nav-number">6.5.</span> <span class="nav-text">interface&#x2F;Java.registerClass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E5%91%98%E5%86%85%E9%83%A8%E7%B1%BB-%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">6.6.</span> <span class="nav-text">成员内部类&#x2F;匿名内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hook-enum"><span class="nav-number">6.7.</span> <span class="nav-text">hook enum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8D%B0hash-map"><span class="nav-number">6.8.</span> <span class="nav-text">打印hash map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8D%B0non-ascii"><span class="nav-number">6.9.</span> <span class="nav-text">打印non-ascii</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-native-hook-NDK%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8"><span class="nav-number">7.</span> <span class="nav-text">Frida native hook : NDK开发入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-native-hook-JNIEnv%E5%92%8C%E5%8F%8D%E5%B0%84"><span class="nav-number">8.</span> <span class="nav-text">Frida native hook : JNIEnv和反射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5jni%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9D%A5%E6%8E%8C%E6%8F%A1%E5%9F%BA%E6%9C%AC%E7%9A%84JNIEnv%E7%94%A8%E6%B3%95"><span class="nav-number">8.1.</span> <span class="nav-text">以jni字符串来掌握基本的JNIEnv用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%8F%8D%E5%B0%84"><span class="nav-number">8.2.</span> <span class="nav-text">Java反射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida%E5%8F%8D%E8%B0%83%E8%AF%95"><span class="nav-number">9.</span> <span class="nav-text">Frida反调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-native-hook-%E7%AC%A6%E5%8F%B7hook-JNI%E3%80%81art-amp-libc"><span class="nav-number">10.</span> <span class="nav-text">Frida native hook : 符号hook JNI、art&amp;libc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Native%E5%87%BD%E6%95%B0%E7%9A%84Java-Hook%E5%8F%8A%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8"><span class="nav-number">10.1.</span> <span class="nav-text">Native函数的Java Hook及主动调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jni-h%E5%A4%B4%E6%96%87%E4%BB%B6%E5%AF%BC%E5%85%A5"><span class="nav-number">10.2.</span> <span class="nav-text">jni.h头文件导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JNI%E5%87%BD%E6%95%B0%E7%AC%A6%E5%8F%B7hook"><span class="nav-number">10.3.</span> <span class="nav-text">JNI函数符号hook</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JNI%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E3%80%81%E8%BF%94%E5%9B%9E%E5%80%BC%E6%89%93%E5%8D%B0%E5%92%8C%E6%9B%BF%E6%8D%A2"><span class="nav-number">10.4.</span> <span class="nav-text">JNI函数参数、返回值打印和替换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-native-hook-JNI-Onload-%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C-inline-hook-native%E5%B1%82%E8%B0%83%E7%94%A8%E6%A0%88%E6%89%93%E5%8D%B0"><span class="nav-number">11.</span> <span class="nav-text">Frida native hook : JNI_Onload&#x2F;动态注册&#x2F;inline_hook&#x2F;native层调用栈打印</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JNI-Onload-%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C%E5%8E%9F%E7%90%86"><span class="nav-number">11.1.</span> <span class="nav-text">JNI_Onload&#x2F;动态注册原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-hook-RegisterNative"><span class="nav-number">11.2.</span> <span class="nav-text">Frida hook RegisterNative</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#native%E5%B1%82%E8%B0%83%E7%94%A8%E6%A0%88%E6%89%93%E5%8D%B0"><span class="nav-number">11.3.</span> <span class="nav-text">native层调用栈打印</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E5%8E%BB%E8%BF%9B%E8%A1%8C%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E6%9B%BF%E6%8D%A2"><span class="nav-number">11.4.</span> <span class="nav-text">主动调用去进行方法参数替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inline-hook"><span class="nav-number">11.5.</span> <span class="nav-text">inline hook</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-native-hook-Frida-hook-native-app%E5%AE%9E%E6%88%98"><span class="nav-number">12.</span> <span class="nav-text">Frida native hook : Frida hook native app实战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-trace%E5%9B%9B%E4%BB%B6%E5%A5%97"><span class="nav-number">13.</span> <span class="nav-text">Frida trace四件套</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jni-trace-trace-jni"><span class="nav-number">13.1.</span> <span class="nav-text">jni trace : trace jni</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strace-trace-syscall"><span class="nav-number">13.2.</span> <span class="nav-text">strace : trace syscall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frida-trace-trace-libc-or-more"><span class="nav-number">13.3.</span> <span class="nav-text">frida-trace : trace libc(or more)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hook-artmethod-trace-java%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="nav-number">13.4.</span> <span class="nav-text">hook_artmethod : trace java函数调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9AOSP%E6%BA%90%E7%A0%81%E6%89%93%E5%8D%B0"><span class="nav-number">13.5.</span> <span class="nav-text">修改AOSP源码打印</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-native-hook-init-array%E5%BC%80%E5%8F%91%E5%92%8C%E8%87%AA%E5%8A%A8%E5%8C%96%E9%80%86%E5%90%91"><span class="nav-number">14.</span> <span class="nav-text">Frida native hook : init_array开发和自动化逆向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#init-array%E5%8E%9F%E7%90%86"><span class="nav-number">14.1.</span> <span class="nav-text">init_array原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IDA%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90init-array"><span class="nav-number">14.2.</span> <span class="nav-text">IDA静态分析init_array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IDA%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so"><span class="nav-number">14.3.</span> <span class="nav-text">IDA动态调试so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#init-array-amp-amp-JNI-Onload-%E2%80%9C%E8%87%AA%E5%90%90%E2%80%9D"><span class="nav-number">14.4.</span> <span class="nav-text">init_array &amp;&amp; JNI_Onload “自吐”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JNI-Onload"><span class="nav-number">14.4.1.</span> <span class="nav-text">JNI_Onload</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#init-array"><span class="nav-number">14.4.2.</span> <span class="nav-text">init_array</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#native%E5%B1%82%E6%9C%AA%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%EF%BC%88%E4%BB%BB%E6%84%8F%E7%AC%A6%E5%8F%B7%E5%92%8C%E5%9C%B0%E5%9D%80%EF%BC%89"><span class="nav-number">14.5.</span> <span class="nav-text">native层未导出函数主动调用（任意符号和地址）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-C-hook"><span class="nav-number">15.</span> <span class="nav-text">C&#x2F;C++ hook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Native-JNI%E5%B1%82%E5%8F%82%E6%95%B0%E6%89%93%E5%8D%B0%E5%92%8C%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E5%8F%82%E6%95%B0%E6%9E%84%E9%80%A0"><span class="nav-number">15.1.</span> <span class="nav-text">Native&#x2F;JNI层参数打印和主动调用参数构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-C-%E7%BC%96%E6%88%90so%E5%B9%B6%E5%BC%95%E5%85%A5Frida%E8%B0%83%E7%94%A8%E5%85%B6%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">15.2.</span> <span class="nav-text">C&#x2F;C++编成so并引入Frida调用其中的函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1581,6 +1428,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
